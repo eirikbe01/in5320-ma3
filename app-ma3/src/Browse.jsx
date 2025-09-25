@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataQuery } from "@dhis2/app-runtime";
-import { CircularLoader, TableColumnHeader, TableBody, TableFoot, TableHead, TableRow, TableCell} from '@dhis2/ui';
+import { CircularLoader, DataTableColumnHeader, TableBody, TableFoot, TableHead, TableRow, TableCell} from '@dhis2/ui';
 import { DataTable } from '@dhis2/ui';
 
 
@@ -66,12 +66,12 @@ export function Browse() {
   console.log(mergedData);
 
   return(
-    <Table>
+    <DataTable>
       <TableHead>
         <TableRow>
-          <TableColumnHeader large>Display Name</TableColumnHeader>
-          <TableColumnHeader large>Value</TableColumnHeader>
-          <TableColumnHeader large>ID</TableColumnHeader>
+          <DataTableColumnHeader large>Display Name</DataTableColumnHeader>
+          <DataTableColumnHeader large>Value</DataTableColumnHeader>
+          <DataTableColumnHeader large>ID</DataTableColumnHeader>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -85,6 +85,6 @@ export function Browse() {
           );
         })}
       </TableBody>
-    </Table>
+    </DataTable>
   );
 }
