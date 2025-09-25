@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataQuery } from "@dhis2/app-runtime";
-import { CircularLoader, DataTableColumnHeader, TableBody, TableFoot, TableHead, TableRow} from '@dhis2/ui';
+import { CircularLoader, TableColumnHeader, TableBody, TableFoot, TableHead, TableRow, TableCell} from '@dhis2/ui';
 import { DataTable } from '@dhis2/ui';
 
 
@@ -22,25 +22,25 @@ function mergeData(data) {
 }
 
 const dataQuery = {
-  dataSets: {
-      resource: 'dataSets/aLpVgfXiz0f',
-      params: {
-          fields: [
-              'name',
-              'id',
-              'dataSetElements[dataElement[id, displayName]',
-          ],
-      },
-  },
-  dataValueSets: {
-      resource: 'dataValueSets',
-      params: {
-          orgUnit: 'KiheEgvUZ0i',
-          dataSet: 'aLpVgfXiz0f',
-          period: '2020',
-      },
-  },
-};
+    dataSets: {
+        resource: 'dataSets/aLpVgfXiz0f',
+        params: {
+            fields: [
+                'name',
+                'id',
+                'dataSetElements[dataElement[id, displayName]',
+            ],
+        },
+    },
+    dataValueSets: {
+        resource: 'dataValueSets',
+        params: {
+            orgUnit: 'KiheEgvUZ0i',
+            dataSet: 'aLpVgfXiz0f',
+            period: '2020',
+        },
+    },
+}
 
 
 export function Browse() {
@@ -58,26 +58,33 @@ export function Browse() {
     );
   }
 
-  if (data) {
-    console.log(data);
+  if (!data) {
+    return;
   }
 
   const mergedData = mergeData(data);
+  console.log(mergedData);
 
   return(
-    <>
-    <h1>Browse</h1>
-    <DataTable>
+    <Table>
       <TableHead>
         <TableRow>
-          <DataTableColumnHeader large>Display Name</DataTableColumnHeader>
-          <DataTableColumnHeader large>Value</DataTableColumnHeader>
-          <DataTableColumnHeader large>ID</DataTableColumnHeader>
+          <TableColumnHeader large>Display Name</TableColumnHeader>
+          <TableColumnHeader large>Value</TableColumnHeader>
+          <TableColumnHeader large>ID</TableColumnHeader>
         </TableRow>
       </TableHead>
       <TableBody>
+        {mergedData.map((row, index) => {
+          return(
+            <TableRow key={index}>
+              <TableCell>{row.displayName}</TableCell>
+              <TableCell>{row.value}</TableCell>
+              <TableCell>{row.id}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
-    </DataTable>
-    </>
+    </Table>
   );
 }
