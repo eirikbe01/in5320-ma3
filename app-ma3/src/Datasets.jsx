@@ -90,19 +90,30 @@ export const Datasets = () => {
                                 <TableCell>{currentDataset.id}</TableCell>
                                 <TableCell>{currentDataset.created}</TableCell>
                             </TableRow>
-                            {isLoading && <CircularLoader />}
-                            {isError && <span>{isError.message}</span>}
-                            {detailsData &&
-                                childElements.map((elem) => {
-                                    return(
-                                        <TableRow>
-                                            <TableCell>{elem.dataElement.displayName}</TableCell>
-                                            <TableCell>{elem.dataElement.id}</TableCell>
-                                            <TableCell>{elem.dataElement.created}</TableCell>
-                                        </TableRow>
-                                    );
-                                })
-                            }
+                        </TableBody>
+                    </DataTable>
+                }
+                {isLoading && <CircularLoader />}
+                {isError && <span>{isError.message}</span>}
+                {detailsData &&
+                    <DataTable>
+                        <TableHead>
+                            <TableRow>
+                                <DataTableColumnHeader large>Display Name</DataTableColumnHeader>
+                                <DataTableColumnHeader large>ID</DataTableColumnHeader>
+                                <DataTableColumnHeader large>Created</DataTableColumnHeader>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {childElements.map((elem) => {
+                            return(
+                                <TableRow>
+                                    <TableCell>{elem.dataElement.displayName}</TableCell>
+                                    <TableCell>{elem.dataElement.id}</TableCell>
+                                    <TableCell>{elem.dataElement.created}</TableCell>
+                                </TableRow>
+                            );
+                        })}
                         </TableBody>
                     </DataTable>
                 }
