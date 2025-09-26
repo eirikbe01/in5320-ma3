@@ -1,5 +1,5 @@
 import { useDataQuery } from '@dhis2/app-runtime';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     CircularLoader, 
     Menu, 
@@ -24,37 +24,52 @@ const dataQuery = {
     }
 }
 
+const detailsQuery = {
+  dataSet: {
+    resource: 'dataSets',
+    id: ({ id }) => id,
+    params: {
+        fields: 'id,displayName,created,dataSetElements[dataElement[id,displayName,created]]',
+        paging: 'false',
+    },
+  },
+}
+
 export const Datasets = () => {
 
-    const { isLoading, isError, data } = useDataQuery(dataQuery);
+    const { loading: listLoading, error: listError, data: listData } = useDataQuery(dataQuery);
+
+    const { isLoading, isError, data: detailsData, refetch } = useDataQuery(detailsQuery, {
+        lazy: true
+    });
     const [currentDataset, setCurrentDataset] = useState();
 
 
     function handleDatasetChange (dataset) {
         setCurrentDataset(dataset);
+        refetch({ id: dataset.id});
     }
 
-    if (isLoading) {
-        return(
-            <CircularLoader large/>
-        );
-    }
-    if (isError) {
-        return(
-            <div>Error: {isError.message}</div>
-        );
-    }
-    if (!data) return;
+    if (listLoading) return <CircularLoader large/>;
+    if (listError) return <div>Error: {listError.message}</div>;
     
-    const datasets = data.dataSets.dataSets;
+    //console.log(listData);
+    const datasets = listData.dataSets.dataSets ?? [];
+    const details = detailsData?.dataSet;
+    const childElements = details?.dataSetElements ?? [];
+
+    if (detailsData) {
+        console.log(detailsData.dataSet);
+        //console.log(childElements);
+    }
 
     return(
         <div className={classes.datasetContainer}>
             <div>
                 <Menu>
-                    {datasets.map((dataset, index) => {
+                    {datasets.map((dataset) => {
                         return(
-                            <MenuItem onClick={() => handleDatasetChange(dataset)} key={index} label={dataset.displayName}/>
+                            <MenuItem onClick={() => handleDatasetChange(dataset)} key={dataset.id} label={dataset.displayName}/>
                         );
                     })}
                 </Menu>
@@ -75,6 +90,19 @@ export const Datasets = () => {
                                 <TableCell>{currentDataset.id}</TableCell>
                                 <TableCell>{currentDataset.created}</TableCell>
                             </TableRow>
+                            {isLoading && <CircularLoader />}
+                            {isError && <span>{isError.message}</span>}
+                            {detailsData &&
+                                childElements.map((elem) => {
+                                    return(
+                                        <TableRow>
+                                            <TableCell>{elem.dataElement.displayName}</TableCell>
+                                            <TableCell>{elem.dataElement.id}</TableCell>
+                                            <TableCell>{elem.dataElement.created}</TableCell>
+                                        </TableRow>
+                                    );
+                                })
+                            }
                         </TableBody>
                     </DataTable>
                 }

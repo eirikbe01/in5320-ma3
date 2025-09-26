@@ -25,7 +25,7 @@ function MyApp() {
       <div className={classes.right}>
         {activePage === "Browse" && <Browse />}
         {activePage === "Insert" && <Insert />}
-        {activePage == "Datasets" && <Datasets />}
+        {activePage === "Datasets" && <Datasets />}
       </div>
     </div>
   );
