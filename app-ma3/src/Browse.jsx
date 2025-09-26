@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataQuery } from "@dhis2/app-runtime";
-import { CircularLoader, DataTableColumnHeader, TableBody, TableFoot, TableHead, TableRow, TableCell} from '@dhis2/ui';
+import { CircularLoader, DataTableColumnHeader, TableBody, TableHead, TableRow, TableCell} from '@dhis2/ui';
 import { DataTable } from '@dhis2/ui';
 
 
